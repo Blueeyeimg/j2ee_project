@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ecnu.car_rent.dao.UserDao">
+
+    <!-- 将JAVA实体类中的属性和表中的字段进行对应
+    column:数据库中的列
+    property:对应的实体类中的属性
+    当实体类中的属性和数据库中的字段对应是，我们使用resultType和parameterType就可以完成CRUD；
+    当实体类中的属性和数据库中的字段不对应时，就要用resultMap和parameterMap了。
+    -->
+    <resultMap id="UserBaseMap" type="com.ecnu.car_rent.model.User">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="user_phone" property="userPhone" jdbcType="VARCHAR"/>
+        <result column="user_email" property="userEmail" jdbcType="VARCHAR"/>
+        <result column="user_pwd" property="userPwd" jdbcType="VARCHAR"/>
+        <result column="pwd_salt" property="pwdSalt" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="modify_time" property="modifyTime" jdbcType="DATE"/>
+        <result column="is_delete" property="isDelete" jdbcType="SMALLINT"></result>
+    </resultMap>
+    <!--<parameterMap id="UserInsertMap" type="om.ecnu.car_rent.model.User">
+        <parameter  property="userName" jdbcType="VARCHAR" resultMap="UserBaseMap"/>
+        <parameter  property="userPhone" jdbcType="VARCHAR" resultMap="UserBaseMap"/>
+        <parameter  property="userEmail" jdbcType="VARCHAR" resultMap="UserBaseMap"/>
+        <parameter  property="userPwd" jdbcType="VARCHAR" resultMap="UserBaseMap"/>
+        <parameter  property="pwdSalt" jdbcType="VARCHAR" resultMap="UserBaseMap"/>
+        <parameter  property="createTime" jdbcType="DATE" resultMap="UserBaseMap"/>
+        <parameter  property="modifyTime" jdbcType="DATE" resultMap="UserBaseMap"/>
+        <parameter  property="isDelete" jdbcType="SMALLINT" resultMap="UserBaseMap"/>
+    </parameterMap>-->
+
+    <select id="selectUserById" parameterType="java.lang.Long" resultMap="UserBaseMap">
+        SELECT * FROM t_user
+        WHERE id = #{userId}
+    </select>
+
+    <select id="selectUserByPhoneOrEmail" resultMap="UserBaseMap">
+        SELECT * FROM t_user
+        WHERE user_email = #{emailOrPhone} OR user_phone = #{emailOrPhone}
+        AND user_state = #{state}
+    </select>
+
+    <select id="selectAllUser" resultMap="UserBaseMap">
+        SELECT * FROM t_user
+    </select>
+    <!--<insert id="sign" parameterMap="UserInsertMap">
+        INSERT INTO t_user
+        (user_name,user_pwd)
+        VALUES
+        (#{userName},#{userPwd})
+    </insert>-->
+
+</mapper>
